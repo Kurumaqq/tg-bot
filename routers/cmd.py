@@ -15,7 +15,7 @@ async def flip(msg : Message):
 
 @cmd_router.message(Command('exit'))
 async def exit(msg : Message):
-  if users.permission(user_id=str(msg.from_user.id), perm='admin'):
+  if users.perm(user_id=str(msg.from_user.id), perm='admin'):
     users.exit(user_id=str(msg.from_user.id))
     await clear_history(msg=msg, send_help=True)
     await msg.answer('Пользователь забыт')
@@ -33,7 +33,7 @@ async def help(msg : Message):
 
 @cmd_router.message(Command('allpass'))
 async def allpass(msg : Message):
-  if users.permission(user_id=str(msg.from_user.id), perm='admin'):
+  if users.perm(user_id=str(msg.from_user.id), perm='admin'):
     ps = password.send_allpas()
     bot_msg = await msg.answer(text=ps, parse_mode='Markdown')
     await del_msg(bot_msg=bot_msg, user_msg=msg, delay=30)
@@ -41,7 +41,7 @@ async def allpass(msg : Message):
 
 @cmd_router.message(Command('files'))
 async def send_files(msg : Message):
-  if users.permission(user_id=str(msg.from_user.id), perm='admin'):
+  if users.perm(user_id=str(msg.from_user.id), perm='admin'):
     bot_msgs = []
     path_files = all_files_path()
     for i in path_files:
@@ -65,5 +65,6 @@ async def todolist(msg : Message):
 
 @cmd_router.message(Command('chatgpt'))
 async def chatgpt(msg : Message):
-  text = f'{msg.from_user.id} {msg.from_user.username} хочет получить права на chatgpt'
-  await bot.send_message(chat_id=OWN_CHAT_ID, text=text, reply_markup=chatgpt_kb)
+  if add_ignored_user(str(msg.from_user.id), users):
+    text = f'{msg.from_user.id} {msg.from_user.username} хочет получить права на chatgpt'
+    await bot.send_message(chat_id=OWN_CHAT_ID, text=text, reply_markup=chatgpt_kb)

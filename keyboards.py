@@ -34,7 +34,7 @@ def get_available_cmd(users_id : str, users : Users, commands_list : list, comma
           try:
             if current_cmd == '/gpt':
               continue
-            if users.permission(user_id=users_id, perm=commands[current_cmd]['perm']):
+            if users.perm(user_id=users_id, perm=commands[current_cmd]['perm']):
               row_line.append(KeyboardButton(text=current_cmd))
               current_cmd = next(i_cmd)
           except StopIteration:

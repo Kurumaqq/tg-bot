@@ -7,6 +7,6 @@ async def main():
   dp.include_routers(*router_master)
   asyncio.create_task(pay_me('Оплати меня хуесос!!!'))
   await dp.start_polling(bot)
-  
+
 if __name__ == '__main__':
   asyncio.run(main())

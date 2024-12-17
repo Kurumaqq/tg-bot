@@ -17,7 +17,7 @@ async def gen_pass(msg : Message):
 
 @cmd_text_router.message(F.text.lower().startswith('p- '))
 async def del_pass(msg : Message):
-  if users.permission(user_id=str(msg.from_user.id), perm='admin'):
+  if users.perm(user_id=str(msg.from_user.id), perm='admin'):
     app = msg.text[3::].strip()
     password.del_password(app=app)
     await bot.delete_message(chat_id=msg.chat.id, message_id=msg.message_id)
@@ -25,7 +25,7 @@ async def del_pass(msg : Message):
 
 @cmd_text_router.message(F.text.lower().startswith('p+ '))
 async def add_pass(msg : Message):
-  if users.permission(user_id=str(msg.from_user.id), perm='admin'):
+  if users.perm(user_id=str(msg.from_user.id), perm='admin'):
     if len(msg.text[3::].split()) >= 2:
       app, ps = msg.text[3::].split()
       password.add_password(app=app, password=ps)
@@ -35,7 +35,7 @@ async def add_pass(msg : Message):
 
 @cmd_text_router.message(F.text.lower().startswith('p '))
 async def pass_from_key(msg : Message):
-  if users.permission(user_id=str(msg.from_user.id), perm='admin'):
+  if users.perm(user_id=str(msg.from_user.id), perm='admin'):
     key = msg.text[2::]
     ps = password.password_from_key(key=key)
     bot_msg = await msg.reply(text=f'`{ps}`', parse_mode='Markdown')
@@ -52,7 +52,7 @@ async def del_files(msg : Message):
 
 @cmd_text_router.message(F.content_type == ContentType.TEXT)
 async def gpt(msg : Message):
-  if users.permission(user_id=str(msg.from_user.id), perm='gpt'):
+  if users.perm(user_id=str(msg.from_user.id), perm='gpt'):
     msg_edited = await msg.answer('Генерация ответа...')
     msg_edited_id = msg_edited.message_id
     chat_id = msg_edited.chat.id

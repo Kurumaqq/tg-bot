@@ -19,6 +19,14 @@ CMD = {
       }
 CMD_KB = [i for i in CMD if i[0] == '/']
 
+ignored_users = []
+
+def add_ignored_user(user_id : str, users):
+  if user_id not in ignored_users or users.perm(user_id, perm='gpt'):
+    ignored_users.append(user_id)
+    return False
+  return True
+
 def get_pay_date():
   with open(f'{DATABASE_PATH}/pay_date.txt', 'r') as file:
     return file.read()
@@ -28,7 +36,7 @@ def get_welcome(user_id : str, users) -> str:
 
   for i in CMD:
     if i == '/gpt':continue
-    if users.permission(user_id=user_id, perm=CMD[i]['perm']):
+    if users.perm(user_id=user_id, perm=CMD[i]['perm']):
       result += f'{i}  -  {CMD[i]["desc"]} \n\n'
 
   return result

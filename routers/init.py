@@ -5,7 +5,9 @@ from aiogram.enums import ChatAction
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.fsm.context import FSMContext
 
-from cfg import get_welcome, TOKEN, CMD, CMD_KB, PASSWORD, FILE_PATH, OWN_CHAT_ID
+from cfg import (get_welcome, TOKEN, CMD, CMD_KB, PASSWORD, 
+                 FILE_PATH, OWN_CHAT_ID, add_ignored_user,
+                 DATABASE_PATH)
 from keyboards import get_available_cmd, get_todolist, note_kb, chatgpt_kb
 from fsm import *
 from users import Users
@@ -21,7 +23,7 @@ from PIL import Image
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
-users = Users()
+users = Users(DATABASE_PATH)
 password = Password() 
 
 async def del_msg(bot_msg : Message, user_msg : Message, delay=0):
