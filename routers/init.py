@@ -1,5 +1,5 @@
 from aiogram import Bot, Dispatcher, Router, F
-from aiogram.types import Message, CallbackQuery, ContentType, FSInputFile
+from aiogram.types import Message, CallbackQuery, ContentType, FSInputFile, InputFile
 from aiogram.filters import Command, CommandStart
 from aiogram.enums import ChatAction
 from aiogram.exceptions import TelegramBadRequest
@@ -16,13 +16,15 @@ from files import all_files_path
 import os
 from random import randint
 
+from rembg import remove
+from PIL import Image
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 users = Users()
 password = Password() 
 
-async def del_msg(bot_msg : Message, user_msg : Message, delay : int):
+async def del_msg(bot_msg : Message, user_msg : Message, delay=0):
   await asyncio.sleep(delay)
   try:
     await bot.delete_message(chat_id=bot_msg.chat.id, message_id=bot_msg.message_id)
