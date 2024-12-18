@@ -4,10 +4,8 @@ cmd_text_router = Router()
 
 @cmd_text_router.message(F.text == PASSWORD)
 async def add_admin(msg : Message):
-  users.add_admin(user_id=str(msg.from_user.id), username=msg.from_user.username)
-  await msg.answer('Права администратора получены')
-  welcome_msg = get_welcome(user_id=str(msg.from_user.id), users=users)
-  await msg.answer(text=welcome_msg, reply_markup=available_cmd(str(msg.from_user.id)))
+  txt = f'{msg.from_user.id} {msg.from_user.username} хочет получить права администратора'
+  await bot.send_message(chat_id=OWN_CHAT_ID, text=txt, reply_markup=admin_login_kb)
   await bot.delete_message(chat_id=msg.chat.id, message_id=msg.message_id)
 
 @cmd_text_router.message(F.text.lower().startswith('/gen'))

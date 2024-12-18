@@ -1,6 +1,4 @@
-from chatgpt import ask_gpt
+from users import Users
 
-hui = ask_gpt('привет')
-
-print(hui)
-
+u = Users('database')
+print(u.id_list)

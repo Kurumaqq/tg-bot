@@ -2,9 +2,15 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMar
 from users import Users
 from math import ceil
 
-note_kb =InlineKeyboardMarkup(inline_keyboard=[
+admin_login_kb = InlineKeyboardMarkup(inline_keyboard=[
+  [InlineKeyboardButton(text='Да', callback_data='yes_admin'),
+   InlineKeyboardButton(text='Нет', callback_data='no_admin')]
+])
+
+note_kb = InlineKeyboardMarkup(inline_keyboard=[
   [InlineKeyboardButton(text='Назад', callback_data='back_task'), 
-  InlineKeyboardButton(text='Изменить заметку', callback_data='edit_note')]])
+  InlineKeyboardButton(text='Изменить заметку', callback_data='edit_note')]
+])
 
 chatgpt_kb = InlineKeyboardMarkup(inline_keyboard=[
   [InlineKeyboardButton(text='Yes', callback_data='yes_gpt'),

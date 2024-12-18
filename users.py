@@ -28,11 +28,20 @@ class Users():
   def id_list(self) -> list:
    with sq.connect(f'{self.database_path}/users.db') as con:
       cur = con.cursor()
-      result = [i[0] for i in cur.execute('SELECT user_id FROM users').fetchall()]
-      return result
+      return tuple([i[0] for i in cur.execute('SELECT user_id FROM users').fetchall()])
   
   @id_list.setter
   def id_list(self) -> None:
+    pass
+
+  @property
+  def admin_list(self) -> tuple:
+    with sq.connect(f'{self.database_path}/users.db') as con:
+      cur = con.cursor()
+      return tuple([i for i in cur.execute('SELECT user_id FROM users WHERE admin = 1').fetchone()])
+
+  @admin_list.setter
+  def admin_list(self):
     pass
 
   def update_note(self, user_id : str, note : str) -> None:
@@ -96,9 +105,9 @@ class Users():
         cur.execute('INSERT INTO users (user_id, username, note) VALUES (?, ?, "Нет заметки")', 
                     (user_id, username,))
         
-  def add_gpt(self, user_id : str, username : str) -> None:
+  def update_perm(self, user_id : str, username : str, perm : str) -> None:
     if user_id not in self.id_list:
       self.add_user_id(user_id, username)
     with sq.connect(f'{self.database_path}/users.db') as con:
       cur = con.cursor()
-      cur.execute('UPDATE users SET gpt = 1 WHERE user_id = ?', (user_id,))
+      cur.execute(f'UPDATE users SET {perm} = 1 WHERE user_id = ?', (user_id,))

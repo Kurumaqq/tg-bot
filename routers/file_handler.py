@@ -27,5 +27,6 @@ async def rem_bg_photo(msg : Message):
     output_file.write(input_image)
     
   await del_msg(bot_msg=bot_msg, user_msg=msg)
+  await bot.send_chat_action(chat_id=msg.chat.id, action=ChatAction.UPLOAD_DOCUMENT)
   await msg.answer_document(FSInputFile(photo_name))
   os.remove(photo_name)

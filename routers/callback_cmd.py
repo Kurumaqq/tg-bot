@@ -39,11 +39,21 @@ async def edit_note_first(cb : CallbackQuery, state : FSMContext):
 @cb_router.callback_query(F.data == 'yes_gpt')
 async def add_user_gpt(cb : CallbackQuery):
   user_id, username = cb.message.text.split()[0], cb.message.text.split()[1]
-  users.add_gpt(user_id, username=username)
+  users.update_perm(user_id=user_id, username=username, perm='gpt')
   await bot.delete_message(chat_id=cb.message.chat.id, message_id=cb.message.message_id)
 
 @cb_router.callback_query(F.data == 'no_gpt')
 async def no_gpt(cb : CallbackQuery):
+  await bot.delete_message(chat_id=cb.message.chat.id, message_id=cb.message.message_id)
+
+@cb_router.callback_query(F.data == 'yes_admin')
+async def yes_login_admin(cb : CallbackQuery):
+  user_id, username = cb.message.text.split()[0], cb.message.text.split()[1]
+  users.update_perm(user_id=user_id, username=username, perm='admin')
+  await bot.delete_message(chat_id=cb.message.chat.id, message_id=cb.message.message_id)
+
+@cb_router.callback_query(F.data == 'no_admin')
+async def no_login_admin(cb : CallbackQuery):
   await bot.delete_message(chat_id=cb.message.chat.id, message_id=cb.message.message_id)
 
 @cb_router.callback_query(lambda c: c.data)
