@@ -1,7 +1,7 @@
 DATABASE_PATH = 'database'
 FILE_PATH = 'files'
-TOKEN = '7770405490:AAEYctkKfuq4K2AgVnP2ojND-EOgJ3aoQUM'
-# TOKEN = '6633787639:AAG6rIVWzdy1rZK4AT3jZUDWuE6u1-ablQA' # Test bot token
+# TOKEN = '7770405490:AAEYctkKfuq4K2AgVnP2ojND-EOgJ3aoQUM'
+TOKEN = '6633787639:AAG6rIVWzdy1rZK4AT3jZUDWuE6u1-ablQA' # Test bot token
 PASSWORD = 'k1682qq'
 OWN_CHAT_ID = '1044605359'
 CMD = {
@@ -20,12 +20,12 @@ CMD = {
       }
 CMD_KB = [i for i in CMD if i[0] == '/']
 
-ignored_users = []
+ignored_gpt = {'gpt' : [], 'admin' : []}
 
-def add_ignored_user(user_id : str, users):
-  if user_id in ignored_users or users.perm(user_id, perm='gpt'): return False
+def add_ignored_user(user_id : str, users, cmd : str):
+  if user_id in ignored_gpt[cmd] or users.perm(user_id, perm=cmd): return False
 
-  ignored_users.append(user_id)
+  ignored_gpt[cmd].append(user_id)
   return True
 
 def get_pay_date():

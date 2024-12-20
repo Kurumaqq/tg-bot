@@ -65,6 +65,6 @@ async def todolist(msg : Message):
 
 @cmd_router.message(Command('chatgpt'))
 async def chatgpt(msg : Message):
-  if add_ignored_user(str(msg.from_user.id), users):
+  if add_ignored_user(str(msg.from_user.id), users, cmd='gpt'):
     text = f'{msg.from_user.id} {msg.from_user.username} хочет получить права на chatgpt'
     await bot.send_message(chat_id=OWN_CHAT_ID, text=text, reply_markup=chatgpt_kb)

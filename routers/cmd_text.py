@@ -4,7 +4,7 @@ cmd_text_router = Router()
 
 @cmd_text_router.message(F.text == PASSWORD)
 async def add_admin(msg : Message):
-  if add_ignored_user(user_id=str(msg.from_user.id), users=users):
+  if add_ignored_user(str(msg.from_user.id), users, cmd='admin'):
     txt = f'{msg.from_user.id} {msg.from_user.username} хочет получить права администратора'
     await bot.send_message(chat_id=OWN_CHAT_ID, text=txt, reply_markup=admin_login_kb)
     await bot.delete_message(chat_id=msg.chat.id, message_id=msg.message_id)
