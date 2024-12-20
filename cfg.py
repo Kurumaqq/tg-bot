@@ -1,9 +1,13 @@
+from dotenv import load_dotenv
+from os import getenv
+
+
+load_dotenv()
 DATABASE_PATH = 'database'
 FILE_PATH = 'files'
-# TOKEN = '7770405490:AAEYctkKfuq4K2AgVnP2ojND-EOgJ3aoQUM'
-TOKEN = '6633787639:AAG6rIVWzdy1rZK4AT3jZUDWuE6u1-ablQA' # Test bot token
-PASSWORD = 'k1682qq'
-OWN_CHAT_ID = '1044605359'
+TOKEN = getenv('TOKEN') # Test bot token
+PASSWORD = getenv('PASSWORD')
+OWN_CHAT_ID = getenv('OWN_CHAT_ID')
 CMD = {
       '/help': {'desc': 'все команды', 'perm': None},
       '/flip': {'desc': 'подкинуть монетку', 'perm': None}, 
