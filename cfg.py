@@ -1,11 +1,10 @@
 from dotenv import load_dotenv
 from os import getenv
 
-
 load_dotenv()
 DATABASE_PATH = 'database'
 FILE_PATH = 'files'
-TOKEN = getenv('TOKEN') # Test bot token
+TOKEN = getenv('TOKEN')
 PASSWORD = getenv('PASSWORD')
 OWN_CHAT_ID = getenv('OWN_CHAT_ID')
 CMD = {
@@ -27,7 +26,7 @@ CMD_KB = [i for i in CMD if i[0] == '/']
 ignored_gpt = {'gpt' : [], 'admin' : []}
 
 def add_ignored_user(user_id : str, users, cmd : str):
-  if user_id in ignored_gpt[cmd] or users.perm(user_id, perm=cmd): return False
+  if user_id in ignored_gpt[cmd] or users.check_perm(user_id, perm=cmd): return False
 
   ignored_gpt[cmd].append(user_id)
   return True
@@ -40,7 +39,7 @@ def get_welcome(user_id : str, users) -> str:
   result = 'Добро пожаловать!!! \n\n'
 
   for i in CMD:
-    if users.perm(user_id=user_id, perm=CMD[i]['perm']):
+    if users.check_perm(user_id, CMD[i]['perm']):
       result += f'{i}  -  {CMD[i]["desc"]} \n\n'
 
   return result

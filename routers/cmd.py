@@ -15,15 +15,15 @@ async def flip(msg : Message):
 
 @cmd_router.message(Command('exit'))
 async def exit(msg : Message):
-  if users.perm(user_id=str(msg.from_user.id), perm='admin'):
-    users.exit(user_id=str(msg.from_user.id))
-    await clear_history(msg=msg, send_help=True)
+  user_id = str(msg.from_user.id)
+  if users.check_perm(user_id, 'admin'):
+    users.update_value(column='admin', value=0, id=user_id)
     await msg.answer('Пользователь забыт')
   else: await msg.answer('Отказано в доступе')
 
 @cmd_router.message(F.text.lower().startswith('/gen'))
 async def gen_pass(msg : Message):
-  ps = password.gen_password(key=msg.text[3::].replace(' ', ''))
+  ps = password.generation(key=msg.text[3::].replace(' ', ''))
   await msg.answer(text=f'`{ps}`', parse_mode='Markdown')
 
 @cmd_router.message(Command('help'))
@@ -33,15 +33,17 @@ async def help(msg : Message):
 
 @cmd_router.message(Command('allpass'))
 async def allpass(msg : Message):
-  if users.perm(user_id=str(msg.from_user.id), perm='admin'):
-    ps = password.send_allpas()
-    bot_msg = await msg.answer(text=ps, parse_mode='Markdown')
+  user_id = str(msg.from_user.id)
+  if users.check_perm(user_id, 'admin'):
+    passwords = password.send_passwords()
+    bot_msg = await msg.answer(text=passwords, parse_mode='Markdown')
     await del_msg(bot_msg=bot_msg, user_msg=msg, delay=30)
   else: await msg.answer('Отказано в доступе')
 
 @cmd_router.message(Command('files'))
 async def send_files(msg : Message):
-  if users.perm(user_id=str(msg.from_user.id), perm='admin'):
+  user_id = str(msg.from_user.id)
+  if users.check_perm(user_id, 'admin'):
     bot_msgs = []
     path_files = all_files_path()
     for i in path_files:
@@ -58,8 +60,8 @@ async def send_files(msg : Message):
   else: await msg.answer('Отказано в доступе')
 
 @cmd_router.message(Command('todolist'))
-async def todolist(msg : Message):
-  todolist_kb = get_todolist(user_id=str(msg.from_user.id), users=users)
+async def send_todolist(msg : Message):
+  todolist_kb = get_todolist(user_id=str(msg.from_user.id), todolist=todolist)
   bot_msg = await msg.answer(text='Список дел', reply_markup=todolist_kb)
   await del_msg(bot_msg=bot_msg, user_msg=msg, delay=300)
 
