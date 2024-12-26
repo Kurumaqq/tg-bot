@@ -16,7 +16,6 @@ async def del_pass(msg : Message):
     app = msg.text[3::].strip()
     password.del_value(user_id=app, column='app')
     await bot.delete_message(chat_id=msg.chat.id, message_id=msg.message_id)
-  else: await msg.answer('Отказано в доступе')
 
 @cmd_text_router.message(F.text.lower().startswith('p+ '))
 async def add_pass(msg : Message):
@@ -29,7 +28,6 @@ async def add_pass(msg : Message):
       
     else: msg.answer('Ошибка!!')
     await bot.delete_message(chat_id=msg.chat.id, message_id=msg.message_id)
-  else: await msg.answer('Отказано в доступе')
 
 @cmd_text_router.message(F.text.lower().startswith('p '))
 async def pass_from_key(msg : Message):
@@ -39,7 +37,6 @@ async def pass_from_key(msg : Message):
     ps = password.get_value(column='password', user_id=key, condition='app')
     bot_msg = await msg.reply(text=f'`{ps}`', parse_mode='Markdown')
     await del_msg(bot_msg=bot_msg, user_msg=msg, delay=7)
-  else: await msg.answer('Отказано в доступе')
 
 @cmd_text_router.message(F.text.lower().startswith('f- '))
 async def del_files(msg : Message):
@@ -55,13 +52,13 @@ async def del_files(msg : Message):
 async def gpt(msg : Message):
   if users.check_perm(user_id=str(msg.from_user.id), perm='gpt'):
     msg_edited = await msg.answer('Генерация ответа...')
-    msg_edited_id = msg_edited.message_id
+    msg_id = msg_edited.message_id
     chat_id = msg_edited.chat.id
-    await bot.send_chat_action(chat_id=msg.chat.id, action=ChatAction.TYPING)
+    txt = await ask_gpt(msg.text)
 
     try:
-      response = await ask_gpt(msg.text)
-      await bot.edit_message_text(text=response, chat_id=chat_id, 
-                                  message_id=msg_edited_id, parse_mode='Markdown')
+      await bot.send_chat_action(chat_id=msg.chat.id, action=ChatAction.TYPING)
+      await bot.edit_message_text(text=txt, chat_id=chat_id, message_id=msg_id, parse_mode='Markdown')
     except:
-      await bot.edit_message_text(text=response, chat_id=chat_id, message_id=msg_edited_id)
+      await bot.send_chat_action(chat_id=msg.chat.id, action=ChatAction.TYPING)
+      await bot.edit_message_text(text=txt, chat_id=chat_id, message_id=msg_id)

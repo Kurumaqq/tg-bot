@@ -5,7 +5,7 @@ from aiogram.enums import ChatAction
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.fsm.context import FSMContext
 
-from cfg import (get_welcome, TOKEN, CMD, CMD_KB, PASSWORD, 
+from cfg import (get_help, TOKEN, CMD, CMD_KB, PASSWORD, 
                  FILE_PATH, OWN_CHAT_ID, add_ignored_user,
                  DATABASE_PATH)
 from keyboards import get_available_cmd, get_todolist, note_kb, chatgpt_kb, admin_login_kb
@@ -13,7 +13,7 @@ from fsm import *
 from database import Users, Password, Todolist
 from chatgpt import ask_gpt
 import asyncio
-from files import all_files_path
+from files import get_file_path
 import os
 from random import randint
 
@@ -43,7 +43,7 @@ async def clear_history(msg: Message, limit=0, send_help=True) -> None:
     except TelegramBadRequest as ex:
       if ex.message == "Bad Request: message to delete not found":
         if send_help:
-          await msg.answer(get_welcome(user_id=msg.from_user.id, users=users), reply_markup=available_cmd(user_id))
+          await msg.answer(get_help(user_id=msg.from_user.id, users=users), reply_markup=available_cmd(user_id))
 
 def available_cmd(user_id : str):
   return get_available_cmd(user_id=user_id, users=users, commands_list=CMD_KB, commands=CMD)

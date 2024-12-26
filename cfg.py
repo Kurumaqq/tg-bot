@@ -35,7 +35,7 @@ def get_pay_date():
   with open(f'{DATABASE_PATH}/pay_date.txt', 'r') as file:
     return file.read()
 
-def get_welcome(user_id : str, users) -> str:
+def get_help(user_id : str, users) -> str:
   result = 'Добро пожаловать!!! \n\n'
 
   for i in CMD:

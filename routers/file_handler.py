@@ -8,8 +8,8 @@ async def download_file(msg : Message):
   file = await bot.get_file(file_id)
   downloaded_file = await bot.download_file(file.file_path)
 
-  with open(f'{FILE_PATH}/{msg.document.file_name}', 'wb') as end_file: 
-    end_file.write(downloaded_file.getvalue())
+  with open(f'{FILE_PATH}/{msg.document.file_name}', 'wb') as final_file: 
+    final_file.write(downloaded_file.getvalue())
     await bot.delete_message(chat_id=msg.chat.id, message_id=msg.message_id)
 
 @files_router.message(F.content_type == ContentType.PHOTO)
@@ -19,12 +19,8 @@ async def rem_bg_photo(msg : Message):
   photo_name = f'kurumaka_photo_{randint(1, 999)}.png'
 
   await bot.download_file(photo.file_path, photo_name)
-  await bot.send_chat_action(chat_id=msg.chat.id, action=ChatAction.UPLOAD_DOCUMENT)
-
-  with open(photo_name, 'rb') as input_file:
-    input_image = remove(input_file.read())
-  with open(photo_name, 'wb') as output_file:
-    output_file.write(input_image)
+  with open(photo_name, 'rb') as input_file: input_image = remove(input_file.read())
+  with open(photo_name, 'wb') as output_file: output_file.write(input_image)
     
   await del_msg(bot_msg=bot_msg, user_msg=msg)
   await bot.send_chat_action(chat_id=msg.chat.id, action=ChatAction.UPLOAD_DOCUMENT)

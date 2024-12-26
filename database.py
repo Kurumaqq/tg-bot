@@ -100,7 +100,7 @@ class Password(Database):
     self.db_name = 'passwords.db'
     self.table = 'passwords'
 
-  def generation(self, key, length=15):
+  def generation(self, key='', length=15):
     password = ''
 
     if length - len(key) > 5:  password_len = length - len(key)
@@ -109,8 +109,11 @@ class Password(Database):
     for i in range(password_len):
       if i == round(password_len / 2): 
         for i in key: password += self.random_register(i)
-      else: password +=  self.random_register(self.ALL_CHARACTERS[randint(0, (len(self.ALL_CHARACTERS) - 1))])
-    return password.replace(password[0], self.random_register(self.LETTERS[randint(0, len(self.LETTERS) - 1)])) 
+      else: 
+        symbol = self.ALL_CHARACTERS[randint(0, (len(self.ALL_CHARACTERS) - 1))]
+        password +=  self.random_register(symbol)
+    random_letter = self.LETTERS[randint(0, len(self.LETTERS) - 1)]
+    return password.replace(password[0], self.random_register(random_letter)) 
 
   def send_passwords(self):
     password_list = self.get_values(('app', 'password'))
@@ -131,12 +134,11 @@ class Todolist(Database):
   def done_task(self, column : str,  user_id : str, task : str) -> None:
      with sq.connect(f'{self.db_path}/{self.db_name}') as con:
       cur = con.cursor()
-      if task[-1] == '☑':
-        cur.execute(f'UPDATE {self.table} SET {column} = ? WHERE  {column} = ? AND user_id = ?', 
-                    (f'{task[:-1:]}', task, user_id,))
-      else: 
-        cur.execute(f'UPDATE {self.table} SET {column} = ? WHERE {column} = ? AND user_id = ?', 
-                    (f'{task}☑', task, user_id,))
+      sql_cmd_done = f'UPDATE {self.table} SET {column} = ? WHERE  {column} = ? AND user_id = ?'
+      sql_cmd_not_done = f'UPDATE {self.table} SET {column} = ? WHERE {column} = ? AND user_id = ?'
+
+      if task[-1] == '☑': cur.execute(sql_cmd_done, (f'{task[:-1:]}', task, user_id,))
+      else: cur.execute(sql_cmd_not_done, (f'{task}☑', task, user_id,))
         
   def clear_done_task(self, column : str, user_id : str) -> None:
     with sq.connect(f'{self.db_path}/{self.db_name}') as con:

@@ -4,7 +4,7 @@ cmd_router = Router()
 
 @cmd_router.message(CommandStart())
 async def start(msg : Message):
-  welcome_msg = get_welcome(user_id=str(msg.from_user.id), users=users)
+  welcome_msg = get_help(user_id=str(msg.from_user.id), users=users)
   await msg.answer(text=welcome_msg, reply_markup=available_cmd(str(msg.from_user.id)))
 
 @cmd_router.message(Command('flip'))
@@ -19,7 +19,6 @@ async def exit(msg : Message):
   if users.check_perm(user_id, 'admin'):
     users.update_value(column='admin', value=0, id=user_id)
     await msg.answer('Пользователь забыт')
-  else: await msg.answer('Отказано в доступе')
 
 @cmd_router.message(F.text.lower().startswith('/gen'))
 async def gen_pass(msg : Message):
@@ -28,8 +27,9 @@ async def gen_pass(msg : Message):
 
 @cmd_router.message(Command('help'))
 async def help(msg : Message):
-  cmd = available_cmd(str(msg.from_user.id))
-  await msg.answer(get_welcome(user_id=str(msg.from_user.id), users=users), reply_markup=cmd) 
+  user_id = str(msg.from_user.id)
+  cmd = available_cmd(user_id)
+  await msg.answer(text=get_help(user_id, users), reply_markup=cmd) 
 
 @cmd_router.message(Command('allpass'))
 async def allpass(msg : Message):
@@ -38,14 +38,13 @@ async def allpass(msg : Message):
     passwords = password.send_passwords()
     bot_msg = await msg.answer(text=passwords, parse_mode='Markdown')
     await del_msg(bot_msg=bot_msg, user_msg=msg, delay=30)
-  else: await msg.answer('Отказано в доступе')
 
 @cmd_router.message(Command('files'))
 async def send_files(msg : Message):
   user_id = str(msg.from_user.id)
   if users.check_perm(user_id, 'admin'):
     bot_msgs = []
-    path_files = all_files_path()
+    path_files = get_file_path()
     for i in path_files:
       await bot.send_chat_action(chat_id=msg.chat.id, action=ChatAction.UPLOAD_DOCUMENT)
       file_name = i[len(FILE_PATH)+1::]
@@ -53,11 +52,8 @@ async def send_files(msg : Message):
       bot_msgs += [send_files.message_id]
 
     await asyncio.sleep(90)
-    for i in bot_msgs:
-      await bot.delete_message(chat_id=msg.chat.id, message_id=i)
+    for i in bot_msgs: await bot.delete_message(chat_id=msg.chat.id, message_id=i)
     await bot.delete_message(chat_id=msg.chat.id, message_id=msg.message_id)
-
-  else: await msg.answer('Отказано в доступе')
 
 @cmd_router.message(Command('todolist'))
 async def send_todolist(msg : Message):
