@@ -18,6 +18,7 @@ async def add_new_task_second(msg : Message, state : FSMContext):
     await msg.answer('Слишком много символов, задача не должна превышать 31 символ!!!')
 
   await state.clear()
+  # test
 
 @fsm_router.message(Edit_note.note)
 async def edit_note_second(msg : Message, state : FSMContext):
