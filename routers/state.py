@@ -26,8 +26,8 @@ async def edit_note_second(msg : Message, state : FSMContext):
   username = msg.from_user.username
 
   users.add_values(no_copy=True, column=('user_id', 'username'), values=(user_id, username), id=user_id)
-  note = users.get_value(column='note', user_id=user_id)
   users.update_value(column='note', value=new_note, id=user_id)
+  note = users.get_value(column='note', user_id=user_id)
 
   await clear_history(msg=msg, limit=3, send_help=False)
   bot_msg = await msg.answer(text=note, reply_markup=note_kb)
