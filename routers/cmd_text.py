@@ -1,4 +1,4 @@
-from routers.init import *
+from routers.imports import *
 
 cmd_text_router = Router()
 

@@ -1,4 +1,4 @@
-from routers.init import bot, dp
+from routers.imports import bot, dp
 from routers.all import router_master
 import asyncio
 from notify import pay_me

@@ -1,4 +1,4 @@
-from routers.init import *
+from routers.imports import *
 
 cb_router = Router()
 
@@ -21,7 +21,7 @@ async def note_task(cb : CallbackQuery):
   user_id, username = str(cb.from_user.id), cb.from_user.username
   chat_id, msg_id = str(cb.message.chat.id), str(cb.message.message_id)
 
-  todolist.add_values(column=('user_id', 'username'), no_copy=True, values=(user_id, username), id=user_id)
+  users.add_values(column=('user_id', 'username'), no_copy=True, values=(user_id, username), id=user_id)
   
   note = users.get_value(column='note', user_id=str(cb.from_user.id))
   await bot.edit_message_text(text=note, chat_id=chat_id, message_id=msg_id, reply_markup=note_kb)

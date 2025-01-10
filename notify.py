@@ -1,4 +1,4 @@
-from routers.init import bot
+from routers.imports import bot
 from datetime import datetime, timedelta
 from cfg import DATABASE_PATH, OWN_CHAT_ID, get_pay_date
 import asyncio
