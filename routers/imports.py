@@ -10,6 +10,7 @@ from cfg import (get_help, TOKEN, CMD, CMD_KB, PASSWORD,
                  DATABASE_PATH)
 from keyboards import get_available_cmd, get_todolist, note_kb, chatgpt_kb, admin_login_kb
 from fsm import *
+from user_properties import User_properties
 from database import Users, Password, Todolist
 from chatgpt import ask_gpt
 import asyncio
@@ -22,9 +23,9 @@ from PIL import Image
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
-users = Users()
-todolist = Todolist()
-password = Password()
+users_db = Users()
+todolist_db = Todolist()
+password_db = Password()
 
 async def del_msg(bot_msg : Message, user_msg : Message, delay=0):
   await asyncio.sleep(delay)
@@ -43,8 +44,8 @@ async def clear_history(msg: Message, limit=0, send_help=True) -> None:
     except TelegramBadRequest as ex:
       if ex.message == "Bad Request: message to delete not found":
         if send_help:
-          await msg.answer(get_help(user_id=msg.from_user.id, users=users), reply_markup=available_cmd(user_id))
+          await msg.answer(get_help(user_id=msg.from_user.id, users=users_db), reply_markup=available_cmd(user_id))
 
 def available_cmd(user_id : str):
-  return get_available_cmd(user_id=user_id, users=users, commands_list=CMD_KB, commands=CMD)
+  return get_available_cmd(user_id=user_id, users=users_db, commands_list=CMD_KB, commands=CMD)
 

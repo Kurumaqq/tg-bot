@@ -37,7 +37,6 @@ class Database():
 
 
   def update_value(self, column : str, value : any, id : str) -> None:
-    
     with sq.connect(f'{self.db_path}/{self.db_name}') as con:
       cur = con.cursor()
       cur.execute(f'UPDATE {self.table} SET {column} = ? WHERE  user_id = ?', 

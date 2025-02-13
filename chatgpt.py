@@ -9,6 +9,6 @@ providers = IterListProvider([Blackbox, ChatGptEs, PollinationsAI, DarkAI, ChatG
 async def ask_gpt(promt : str) -> str:
     return await g4f.ChatCompletion.create_async(
         model=gpt_4o,
-        provider=providers,
+        provider=gpt_4o.best_provider,
         messages=[{'role': 'user', 'content': promt}],
     ) 
