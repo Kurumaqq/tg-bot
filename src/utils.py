@@ -43,15 +43,7 @@ async def clear_history(msg: Message, bot: Bot, limit=0, send_help=True) -> None
              get_help_text(user_id=user_id, users=users_db), 
              reply_markup=commands_kb(user_id)
              )
-
-def commands_kb(user_id : str):
-  return commands_kb(
-     user_id=user_id, 
-    users_db=users_db, 
-    commands_list=commands_kb, 
-    commands=config.commands
-    )
-
+          
 def get_help_text(user_id : str, users) -> str:
     text = 'Добро пожаловать!!! \n\n'
     commands = config.commands
