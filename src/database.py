@@ -114,32 +114,12 @@ class Password(Database):
     random_letter = self.LETTERS[randint(0, len(self.LETTERS) - 1)]
     return password.replace(password[0], self.random_register(random_letter)) 
 
-  def send_passwords(self):
+  def get_passwords(self):
     password_list = self.get_values(('app', 'password'))
-    all_password = ''
+    all_password = '**Все пароли**\n'
     for i in password_list: all_password += f'{i[0]} - `{i[1]}` \n\n'
     return all_password
 
   def random_register(self, text : str) -> str:
     rd = randint(0, 1)
     return text.lower() if rd == 1 else text.upper()
-
-class Todolist(Database):
-  def __init__(self):
-    self.db_path = 'database'
-    self.db_name = 'todolist.db'
-    self.table = 'todolist'
-
-  def done_task(self, column : str,  user_id : str, task : str) -> None:
-     with sq.connect(f'{self.db_path}/{self.db_name}') as con:
-      cur = con.cursor()
-      sql_cmd_done = f'UPDATE {self.table} SET {column} = ? WHERE  {column} = ? AND user_id = ?'
-      sql_cmd_not_done = f'UPDATE {self.table} SET {column} = ? WHERE {column} = ? AND user_id = ?'
-
-      if task[-1] == '☑': cur.execute(sql_cmd_done, (f'{task[:-1:]}', task, user_id,))
-      else: cur.execute(sql_cmd_not_done, (f'{task}☑', task, user_id,))
-        
-  def clear_done_task(self, column : str, user_id : str) -> None:
-    with sq.connect(f'{self.db_path}/{self.db_name}') as con:
-      cur = con.cursor()
-      cur.execute(f'DELETE FROM {self.table} WHERE {column} LIKE "%☑" AND user_id = ?', (user_id,))

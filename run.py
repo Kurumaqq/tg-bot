@@ -1,12 +1,14 @@
-from routers.imports import bot, dp
-from routers.all import router_master
 import asyncio
-from notify import pay_me
+from aiogram import Bot, Dispatcher
+from os import getenv
+from src.routers.router_master import router_master 
+
+bot = Bot(getenv('TOKEN'))
+dp = Dispatcher()
 
 async def main():   
   dp.include_routers(*router_master)
   await dp.start_polling(bot)
-  asyncio.create_task(pay_me('Оплати меня хуесос!!!'))
 
 if __name__ == '__main__':
   asyncio.run(main())
