@@ -4,15 +4,19 @@ from os import getenv
 load_dotenv()
 class Config():
     @property
-    def password(self):
+    def token(self) -> str:
+        return getenv('TOKEN')
+
+    @property
+    def password(self) -> str:
         return getenv('PASSWORD')
     
     @property
-    def own_chat_id(self):
+    def own_chat_id(self) -> str:
         return getenv('OWN_CHAT_ID')
     
     @property
-    def commands(self):
+    def commands(self) -> dict[dict]:
         return {
         '/help': {'desc': 'все команды', 'perm': None},
         '/flip': {'desc': 'подкинуть монетку', 'perm': None}, 

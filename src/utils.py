@@ -24,7 +24,7 @@ class User_properties():
             self.chat_id = user.message.chat.id
         else: raise TypeError
             
-async def del_msg(bot_msg: Message, user_msg: Message, bot: Bot, delay=0):
+async def del_msg(bot_msg: Message, user_msg: Message, bot: Bot, delay=0) -> None:
   await asyncio.sleep(delay)
   try:
     await bot.delete_message(chat_id=bot_msg.chat.id, message_id=bot_msg.message_id)

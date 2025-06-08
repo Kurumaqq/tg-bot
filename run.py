@@ -1,9 +1,10 @@
 import asyncio
 from aiogram import Bot, Dispatcher
-from os import getenv
 from src.routers.router_master import router_master 
+from src.config import Config
 
-bot = Bot(getenv('TOKEN'))
+config = Config()
+bot = Bot(config.token)
 dp = Dispatcher()
 
 async def main():   

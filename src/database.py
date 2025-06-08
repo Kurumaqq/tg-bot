@@ -25,7 +25,7 @@ class Database():
 
       return result
 
-  def get_value(self, column : str, user_id : str, convert_bool=False, condition='user_id'):
+  def get_value(self, column : str, user_id : str, convert_bool=False, condition='user_id') -> bool:
     with sq.connect(f'{self.db_path}/{self.db_name}') as con:
       cur = con.cursor()
       sql_cmd =  f'SELECT {column} FROM {self.table} WHERE {condition} = ?'
@@ -65,8 +65,7 @@ class Database():
       cur = con.cursor()
       cur.execute(f'DELETE FROM {self.table} WHERE {column} = ?', (user_id,))
 
-
-  def get_column(self, column : tuple):
+  def get_column(self, column : tuple) -> str:
     col = ''
     if type(column) == tuple:
       for i in range(len(column)):
@@ -81,7 +80,7 @@ class Users(Database):
     self.db_name = 'users.db'
     self.table = 'users'
 
-  def check_perm(self, user_id : str, perm : str):
+  def check_perm(self, user_id : str, perm : str) -> bool | None:
     with sq.connect(f'{self.db_path}/{self.db_name}') as con:
       cur = con.cursor()
       sql_cmd = f'SELECT {perm} FROM users WHERE user_id = ?'
@@ -99,7 +98,7 @@ class Password(Database):
     self.db_name = 'passwords.db'
     self.table = 'passwords'
 
-  def generation(self, key='', length=15):
+  def generation(self, key='', length=15) -> str:
     password = ''
 
     if length - len(key) > 5:  password_len = length - len(key)
@@ -114,7 +113,7 @@ class Password(Database):
     random_letter = self.LETTERS[randint(0, len(self.LETTERS) - 1)]
     return password.replace(password[0], self.random_register(random_letter)) 
 
-  def get_passwords(self):
+  def get_passwords(self) -> str:
     password_list = self.get_values(('app', 'password'))
     all_password = '**Все пароли**\n'
     for i in password_list: all_password += f'{i[0]} - `{i[1]}` \n\n'
