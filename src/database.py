@@ -1,5 +1,10 @@
 import sqlite3 as sq
+from cryptography.fernet import Fernet
+from src.config import Config
 from random import randint
+
+config = Config()
+cipher = Fernet(config.encrypt_key)
 
 class Database():
   def __init__(self):
@@ -25,7 +30,7 @@ class Database():
 
       return result
 
-  def get_value(self, column : str, user_id : str, convert_bool=False, condition='user_id') -> bool:
+  def get_value(self, column : str, user_id : str, convert_bool=False, condition='user_id') -> bool | str:
     with sq.connect(f'{self.db_path}/{self.db_name}') as con:
       cur = con.cursor()
       sql_cmd =  f'SELECT {column} FROM {self.table} WHERE {condition} = ?'
@@ -116,7 +121,8 @@ class Password(Database):
   def get_passwords(self) -> str:
     password_list = self.get_values(('app', 'password'))
     all_password = '**Все пароли**\n'
-    for i in password_list: all_password += f'{i[0]} - `{i[1]}` \n\n'
+    for i in password_list: 
+      all_password += f'{i[0]} - `{cipher.decrypt(i[1]).decode()}` \n\n'
     return all_password
 
   def random_register(self, text : str) -> str:

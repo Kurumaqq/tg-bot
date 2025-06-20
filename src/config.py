@@ -4,6 +4,10 @@ from os import getenv
 load_dotenv()
 class Config():
     @property
+    def encrypt_key(self):
+        return getenv('ENCRYPTION_KEY')
+
+    @property
     def token(self) -> str:
         return getenv('TOKEN')
 
